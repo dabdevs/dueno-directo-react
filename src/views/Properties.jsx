@@ -5,6 +5,8 @@ import PropertyListItem from "../components/PropertyListItem";
 
 export default function Properties() {
     const {properties} = useStateContext()
+
+    console.log('properties',properties)
     
     const onDelete = () => {
         console.log('on delete click')
@@ -14,7 +16,7 @@ export default function Properties() {
         <>
             <PageComponent title={'Properties'} >
                 <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 md:grid-cols-3">
-                    {properties.map(property => (
+                    {properties.data?.map(property => (
                         <PropertyListItem property={property} onDelete={onDelete} key={property.id} />
                     ))}
                 </div>

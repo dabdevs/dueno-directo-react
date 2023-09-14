@@ -6,7 +6,7 @@ export default function PropertyListItem({property, onDelete}) {
   return (
     <div className='flex flex-col py-4 px-6 shadow-md bg-white hover:bg-gray-50 h-[470px]'>
         <img 
-            src={''} 
+              src={property.photos[0]?.path} 
             alt={property.title} 
             className='w-full h-48 object-cover'
         />
