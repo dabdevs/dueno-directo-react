@@ -6,24 +6,29 @@ import Dashboard from "./views/Dashboard.jsx";
 import LandingPage from "./views/LandingPage.jsx";
 import GuestLayout from "./components/GuestLayout.jsx";
 import DashboardLayout from "./components/DashboardLayout.jsx";
+import Properties from "./views/Properties.jsx";
 
 const router = createBrowserRouter([
     {
-        path: '/dashboard',
+        path: '/',
         element: <DashboardLayout />,
         children: [
             {
-                path: '',
+                path: 'dashboard',
                 element: <Dashboard />
+            },
+            {
+                path: 'properties',
+                element: <Properties />
             },
         ]
     },
     {
-        path: '/',
+        path: '/guest',
         element: <GuestLayout />,
         children: [
             {
-                path: '/',
+                path: '',
                 element: <LandingPage />
             },
             {
