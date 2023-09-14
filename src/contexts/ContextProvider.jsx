@@ -8,7 +8,7 @@ const StateContext = createContext({
     setUserToken: () => {}
 })
 
-const authToken = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjQwMDAvYXBpL3YxL2F1dGgvbG9naW4iLCJpYXQiOjE2OTQ3MDIwNjQsImV4cCI6MTY5NDcwNTY2NCwibmJmIjoxNjk0NzAyMDY0LCJqdGkiOiIyWk10TUlxdHFYZFJoUU9UIiwic3ViIjoiMTUwMyIsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.jEoGTw1S4-SKwei8C_7aORqhPiQJR_2qNes1P0jlJB0'
+const authToken = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjQwMDAvYXBpL3YxL2F1dGgvbG9naW4iLCJpYXQiOjE2OTQ3MDY0ODcsImV4cCI6MTY5NDcxMDA4NywibmJmIjoxNjk0NzA2NDg3LCJqdGkiOiJ6c2k3d1RxQmFpSEJDb2JPIiwic3ViIjoiMTUwMyIsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.hM6NCkpVWH7QEXdivAedEOXFJAJN4xK9wRU_D9NCYvA'
 const baseUrl = 'http://localhost:4000/api/v1'
 
 axios.defaults.headers.common = { 'Authorization': `bearer ${authToken}` };
@@ -19,6 +19,7 @@ const propertiesJson = await axios.get(`${baseUrl}/properties`)
     return response.data
 })
 .catch(function (error) {
+    if (error) alert(error.response.data.message)
     console.log(error);
 });
 
@@ -28,6 +29,7 @@ export const ContextProvider = ({children}) => {
         email: 'johnnyb@gmail.com',
         imgUrl: 'https://dummyimage.com/600x400/b2b2b2/000.jpg'
     })
+    console.log('la:', propertiesJson)
     const [userToken, setUserToken] = useState(authToken)
     const [properties, setProperties] = useState(propertiesJson)
 

@@ -15,7 +15,7 @@ export default function PropertyListItem({property, onDelete}) {
         <div className='flex justify-between items-center mt-3'>
             <TButton to={`${property.id}`}> 
                 <PencilIcon className='w-5 h-5 mr-2'/>
-                Edit 
+                  Edit  {property.id}
             </TButton>
 
             <div className='flex items-center'>
