@@ -4,7 +4,7 @@ export default function Dashboard() {
     return (
         <>
             <PageComponent title={'Dashboard'}>
-                Children
+                Dashboard content
             </PageComponent>
         </>
     )
