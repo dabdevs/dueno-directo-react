@@ -18,7 +18,7 @@ export default function Properties() {
             <PageComponent title={'Properties'} buttons={
                 <TButton to="/properties/create">
                     <PlusCircleIcon className="h-6 w-6 mr-2"/>
-                    Create
+                    Create 
                 </TButton>
             }>
                 <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 md:grid-cols-3">

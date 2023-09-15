@@ -8,7 +8,7 @@ const StateContext = createContext({
     setUserToken: () => {}
 })
 
-const authToken = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjQwMDAvYXBpL3YxL2F1dGgvbG9naW4iLCJpYXQiOjE2OTQ3MDY0ODcsImV4cCI6MTY5NDcxMDA4NywibmJmIjoxNjk0NzA2NDg3LCJqdGkiOiJ6c2k3d1RxQmFpSEJDb2JPIiwic3ViIjoiMTUwMyIsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.hM6NCkpVWH7QEXdivAedEOXFJAJN4xK9wRU_D9NCYvA'
+const authToken = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjQwMDAvYXBpL3YxL2F1dGgvbG9naW4iLCJpYXQiOjE2OTQ3MzkxNTEsImV4cCI6MTY5NDc0Mjc1MSwibmJmIjoxNjk0NzM5MTUxLCJqdGkiOiJHOGRYckFJdk5HYkpMNDduIiwic3ViIjoiMTUwMyIsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.wmd_36CjsDMJ4vnXi6OrCz-u4oc052I4eVYrMsdOc8c'
 const baseUrl = 'http://localhost:4000/api/v1'
 
 axios.defaults.headers.common = { 'Authorization': `bearer ${authToken}` };
