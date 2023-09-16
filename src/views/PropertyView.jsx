@@ -1,11 +1,36 @@
 import { PhotoIcon, UserCircleIcon } from '@heroicons/react/24/solid'
 import PageComponent from '../components/PageComponent'
+import { useState } from 'react'
 
-export default function PropertyForm() {
+export default function PropertyView() {
+  const [property, setProperty] = useState({
+    title: '',
+    description: '',
+    price: null,
+    bedrooms: null,
+    bathrooms: null,
+    balcony: 0,
+    area: null,
+    country: {},
+    city: {},
+    state: '',
+    neighborhood: '',
+    phoneNumber: null,
+    email: '',
+    type: '',
+    negotiable: 0,
+    requirements: {},
+    note: null
+  })
+
+  const onSubmit = () => {
+    console.log('on submit')
+  }
+
   return (
     <>
       <PageComponent title={'Create property'}>
-        <form>
+        <form onSubmit={onSubmit}>
           <div className="space-y-12">
             <div className="border-b border-gray-900/10 pb-12">
               {/* <h2 className="text-base font-semibold leading-7 text-gray-900">Profile</h2> */}
@@ -23,7 +48,7 @@ export default function PropertyForm() {
                       type="text"
                       name="title"
                       id="title"
-                      autoComplete="title"
+                      value={property.title}
                       className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                     />
                   </div>
@@ -37,6 +62,7 @@ export default function PropertyForm() {
                     <textarea
                       id="description"
                       name="description"
+                      value={property.description}
                       rows={3}
                       className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                       defaultValue={''}
@@ -52,6 +78,7 @@ export default function PropertyForm() {
                   <div className="mt-2">
                     <select
                       id="property-type"
+                      value={property.propertyType}
                       name="property_type"
                       className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
                     >
@@ -70,6 +97,7 @@ export default function PropertyForm() {
                     <input
                       type="number"
                       min={0}
+                      value={property.price}
                       name="price"
                       id="price"
                       autoComplete="given-name"
@@ -85,6 +113,7 @@ export default function PropertyForm() {
                       <input
                         id="negotiable-no"
                         name="negotiable"
+                        value={property.negotiable}
                         type="radio"
                         className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
                       />
@@ -96,6 +125,7 @@ export default function PropertyForm() {
                       <input
                         id="negotiable-yes"
                         name="negotiable"
+                        value={property.negotiable}
                         type="radio"
                         className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
                       />
@@ -150,7 +180,7 @@ export default function PropertyForm() {
               <p className="mt-1 text-sm leading-6 text-gray-600">Tell us where your property is located.</p>
 
               <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-8">
-                
+
                 <div className="sm:col-span-2">
                   <label htmlFor="country" className="block text-sm font-medium leading-6 text-gray-900">
                     Country
@@ -159,6 +189,7 @@ export default function PropertyForm() {
                     <select
                       id="country"
                       name="country"
+                      value={property.country.name}
                       autoComplete="country-name"
                       className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
                     >
@@ -177,6 +208,7 @@ export default function PropertyForm() {
                     <select
                       id="city"
                       name="city"
+                      value={property.city.name}
                       autoComplete="city-name"
                       className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
                     >
@@ -195,6 +227,7 @@ export default function PropertyForm() {
                     <input
                       type="text"
                       name="region"
+                      value={property.state}
                       id="region"
                       className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                     />
@@ -209,6 +242,7 @@ export default function PropertyForm() {
                     <input
                       type="text"
                       name="neighborhood"
+                      value={property.neighborhood}
                       id="neighborhood"
                       className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                     />
@@ -232,6 +266,7 @@ export default function PropertyForm() {
                       type="number"
                       min={0}
                       name="bedrooms"
+                      value={property.bedrooms}
                       id="bedrooms"
                       className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                     />
@@ -254,6 +289,24 @@ export default function PropertyForm() {
                 </div>
 
                 <div className="sm:col-span-2">
+                  <label htmlFor="balcony" className="block text-sm font-medium leading-6 text-gray-900">
+                    Balcony
+                  </label>
+                  <div className="mt-2">
+                    <select
+                      id="balcony"
+                      name="balcony"
+                      value={property.balcony}
+                      autoComplete="balcony-name"
+                      className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
+                    >
+                      <option>No</option>
+                      <option>Yes</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div className="sm:col-span-2">
                   <label htmlFor="area" className="block text-sm font-medium leading-6 text-gray-900">
                     Area
                   </label>
@@ -262,26 +315,14 @@ export default function PropertyForm() {
                       type="number"
                       min={0}
                       name="area"
+                      value={property.area}
                       id="area"
                       className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                     />
                   </div>
                 </div>
 
-                <div className="sm:col-span-2">
-                  <label htmlFor="bathrooms" className="block text-sm font-medium leading-6 text-gray-900">
-                    Bathrooms
-                  </label>
-                  <div className="mt-2">
-                    <input
-                      type="number"
-                      min={0}
-                      name="bathrooms"
-                      id="bathrooms"
-                      className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                    />
-                  </div>
-                </div>
+                
 
               </div>
             </div>

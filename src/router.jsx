@@ -7,7 +7,7 @@ import LandingPage from "./views/LandingPage.jsx";
 import GuestLayout from "./components/GuestLayout.jsx";
 import DashboardLayout from "./components/DashboardLayout.jsx";
 import Properties from "./views/Properties.jsx";
-import PropertyForm from "./views/PropertyView.jsx";
+import PropertyView from "./views/PropertyView.jsx";
 
 const router = createBrowserRouter([
     {
@@ -24,7 +24,7 @@ const router = createBrowserRouter([
             },
             {
                 path: 'properties/create',
-                element: <PropertyForm />
+                element: <PropertyView />
             },
         ]
     },

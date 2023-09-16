@@ -1,12 +1,70 @@
+import { useState, useRef, useContext, useEffect } from "react";
+import { useStateContext } from "../contexts/ContextProvider";
+import axios from '../rest-api/axios';
+import { AdjustmentsHorizontalIcon } from "@heroicons/react/24/outline";
+
+const LOGIN_URL = '/auth/login'
 
 export default function Login() {
+    const { setAuth, auth } = useStateContext()
+    const emailRef = useRef()
+    const errRef = useRef()
+
+    const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('')
+    const [errMsg, setErrMsg] = useState('')
+
+    useEffect(() => {
+        emailRef.current.focus()
+    }, [])
+
+    useEffect(() => {
+        setErrMsg('')
+    }, [email, password])
+
+    const handleSubmit = async (e) => {
+        e.preventDefault()
+
+        try {
+            var response = await axios.post(LOGIN_URL, JSON.stringify({ email, password }),
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    withCredentials: true
+                }
+            );
+
+            const auth = {
+                'user': response?.data?.user,
+                'token': response?.data?.token
+            }
+
+            setAuth(auth)
+
+            console.log('Login', auth)
+
+            setEmail('')
+            setPassword('')
+        } catch (err) {
+            if (!err?.response) {
+                setErrMsg('No server response')
+            }else {
+                setErrMsg(err.response.data.message)
+            }
+
+            errRef.current.focus()
+        }
+    }
+
     return (
-        <>
+        <section>
+            <p ref={errRef} className={errMsg ? 'errmsg' : 'offscreen'} aria-live='assertive'>{errMsg}</p>
             <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
                 Sign in to your account
             </h2>
             <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-                <form className="space-y-6" action="#" method="POST">
+                <form className="space-y-6" onSubmit={handleSubmit}>
                     <div>
                         <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">
                             Email address
@@ -16,7 +74,9 @@ export default function Login() {
                                 id="email"
                                 name="email"
                                 type="email"
-                                autoComplete="email"
+                                ref={emailRef}
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
                                 required
                                 className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                             />
@@ -39,8 +99,10 @@ export default function Login() {
                                 id="password"
                                 name="password"
                                 type="password"
-                                autoComplete="current-password"
-                                required
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                autoComplete="off"
+                                
                                 className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                             />
                         </div>
@@ -63,6 +125,6 @@ export default function Login() {
                     </a>
                 </p>
             </div>
-        </>
+        </section>
     )
 }

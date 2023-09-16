@@ -4,16 +4,15 @@ import { Bars3Icon, BellIcon, UserIcon, XMarkIcon } from '@heroicons/react/24/ou
 import { NavLink, Navigate, Outlet } from 'react-router-dom'
 import { useStateContext } from '../contexts/ContextProvider'
 
-
 const navigation = [
-    { name: 'Dashboard', href: '/dashboard'},
-    { name: 'Properties', href: '/properties'},
-    { name: 'Tenants', href: '/tenants'},
-    { name: 'Users', href: '/users'},
-    { name: 'Verification Requests', href: '/verification-requests'},
+    { name: 'Dashboard', href: '/dashboard' },
+    { name: 'Properties', href: '/properties' },
+    { name: 'Tenants', href: '/tenants' },
+    { name: 'Users', href: '/users' },
+    { name: 'Verification Requests', href: '/verification-requests' },
 ]
 const userNavigation = [
-    {name: 'Logout', href: '#'},
+    { name: 'Logout', href: '#' },
 ]
 
 const logout = (ev) => {
@@ -26,9 +25,10 @@ function classNames(...classes) {
 }
 
 export default function DashboardLayout() {
-    const { currentUser, userToken } = useStateContext();
-    if (!userToken) {
-        return <Navigate to={'/guest/login'}/>
+    var { auth } = useStateContext();
+    
+    if (!auth) {
+        return <Navigate to={'/guest/login'} />
     }
 
     return (
@@ -83,9 +83,9 @@ export default function DashboardLayout() {
                                                     <Menu.Button className="relative flex max-w-xs items-center rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
                                                         <span className="absolute -inset-1.5" />
                                                         <span className="sr-only">Open user menu</span>
-                                                        <span className='text-white'>{currentUser.name}</span>
-                                                        <UserIcon className="h-6 w-6 text-white" aria-hidden="true"/>
-                                                        {/* <img className="h-8 w-8 rounded-full" src={user.imageUrl} alt="" /> */}
+                                                        <span className='text-white'>{auth?.user.givenName} {auth?.user.familyName}</span>
+                                                        <UserIcon className="h-6 w-6 text-white" aria-hidden="true" />
+                                                        {/* <img className="h-8 w-8 rounded-full" src={auth?.user.imageUrl} alt="" /> */}
                                                     </Menu.Button>
                                                 </div>
                                                 <Transition
@@ -132,7 +132,7 @@ export default function DashboardLayout() {
                                             key={item.name}
                                             as="a"
                                             to={item.href}
-                                            className={({isActive}) => classNames(
+                                            className={({ isActive }) => classNames(
                                                 isActive ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white',
                                                 'block rounded-md px-3 py-2 text-base font-medium'
                                             )}
@@ -144,12 +144,12 @@ export default function DashboardLayout() {
                                 <div className="border-t border-gray-700 pb-3 pt-4">
                                     <div className="flex items-center px-5">
                                         <div className="flex-shrink-0">
-                                            <UserIcon className="h-6 w-6 text-white" aria-hidden="true"/>
-                                            {/* <img className="h-8 w-8 rounded-full" src={user.imageUrl} alt="" /> */}
+                                            <UserIcon className="h-6 w-6 text-white" aria-hidden="true" />
+                                            {/* <img className="h-8 w-8 rounded-full" src={auth?.user.imageUrl} alt="" /> */}
                                         </div>
                                         <div className="ml-3">
-                                            <div className="text-base font-medium leading-none text-white">{currentUser.name}</div>
-                                            <div className="text-sm font-medium leading-none text-gray-400">{currentUser.email}</div>
+                                            <div className="text-base font-medium leading-none text-white">{auth?.user.givenName} {auth?.user.familyName}</div>
+                                            <div className="text-sm font-medium leading-none text-gray-400">{auth?.user.email}</div>
                                         </div>
                                         <button
                                             type="button"
