@@ -4,20 +4,11 @@ import axios from '../rest-api/axios'
 const passwordRegex = /^(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,20}$/;
 const REGISTER_URL = '/auth/register'
 
-// const isValidPassword = passwordRegex.test("YourPassword123");
-
-// if (isValidPassword) {
-//     console.log("Password is valid");
-// } else {
-//     console.log("Password is not valid");
-// }
-
 export default function Register() {
     const emailRef = useRef()
     const errRef = useRef()
 
     const [email, setEmail] = useState('')
-    const [validEmail, setValidEmail] = useState(false)
     const [emailFocus, setEmailFocus] = useState(false)
 
     const [password, setPassword] = useState('')
@@ -26,11 +17,9 @@ export default function Register() {
 
     const [matchPassword, setMatchPassword] = useState('')
     const [validMatch, setValidMatch] = useState(false)
-    const [matchFocus, setMatchFocus] = useState(false)
 
     const [role, setRole] = useState('')
 
-    const [errMsg, setErrMsg] = useState('')
     const [success, setSuccess] = useState(false)
     const [errors, setErrors] = useState(null)
 
@@ -39,28 +28,27 @@ export default function Register() {
     }, [])
 
     useEffect(() => {
-        // const result = passwordRegex.test(password)
-        // console.log(result)
-        setValidPassword(password)
+        const result = passwordRegex.test(password)
+        setValidPassword(result)
 
         const match = password === matchPassword
         setValidMatch(match)
     }, [password, matchPassword])
 
     useEffect(() => {
-        setErrMsg('')
+        setErrors(null)
     }, [email, password, matchPassword])
 
     const handleSubmit = async (e) => {
         e.preventDefault()
 
         if (email == '' || password == '' || role == '') {
-            setErrMsg('All fields are required.')
+            setErrors({ message: 'All fields are required.' })
             return
         }
 
         if (!validMatch) {
-            setErrMsg('Passwords do not match')
+            setErrors({ message: 'Passwords do not match' })
             return
         }
 
@@ -80,10 +68,9 @@ export default function Register() {
             setSuccess(false)
 
             if (!err?.response) {
-                setErrMsg('No server response')
+                setErrors(setErrors({ message: 'No server response' }))
             } else {
-                const errors = err.response.data.errors
-                setErrors(errors)
+                setErrors(err.response.data.errors)
             }
 
             errRef.current.focus()
@@ -106,7 +93,9 @@ export default function Register() {
                             <span class="font-medium">Error!</span> 
                             <ul>
                                 {errors?.email && errors?.email.map(e => <li>{e}</li>)}
+                                {errors?.password && errors?.password.map(e => <li>{e}</li>)}
                                 {errors?.role && errors?.role.map(e => <li>{e}</li>)}
+                                {errors?.message && <li>{errors?.message}</li>}
                             </ul>
                         </div>
                     </div>
@@ -133,7 +122,6 @@ export default function Register() {
                                 autoComplete="email"
                                 ref={emailRef}
                                 onChange={(e) => setEmail(e.target.value)}
-                                aria-invalid={validEmail ? 'false' : 'true'}
                                 onFocus={() => setEmailFocus(true)}
                                 onBlur={() => setEmailFocus(false)}
                                 required
@@ -164,7 +152,7 @@ export default function Register() {
                             >
                                 {validPassword
                                     ? ''
-                                    : <small className="text-red-500">
+                                    : <small className="text-blue-500">
                                         Between 8 to 20 characters, and must have at least one capital letter and one number.
                                     </small>
                                 }
@@ -218,7 +206,7 @@ export default function Register() {
                             >
                                 <option value=''>Select an option</option>
                                 <option value={'tenant'}>A renter</option>
-                                <option value={'owner'}>An owner</option>
+                                <option value={'owner'}>An landlord</option>
                             </select>
                         </div>
                     </div>
@@ -231,13 +219,6 @@ export default function Register() {
                         </button>
                     </div>
                 </form>
-
-                <p className="mt-10 text-center text-sm text-gray-500">
-                    Not a member?{' '}
-                    <a href="#" className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500">
-                        Start a 14 day free trial
-                    </a>
-                </p>
             </div>
         </section>
     )
