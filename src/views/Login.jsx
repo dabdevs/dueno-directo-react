@@ -37,9 +37,11 @@ export default function Login() {
             );
 
             const auth = {
-                'user': data?.user,
-                'roles': data?.roles,
-                'permissions': data?.permissions,
+                'user': {
+                    ...data?.user,
+                    'roles': data?.roles,
+                    'permissions': data?.permissions
+                },
                 'token': data?.token
             }
 
@@ -47,6 +49,7 @@ export default function Login() {
             setEmail('')
             setPassword('')
         } catch (err) {
+            console.error(err)
             if (!err?.response) {
                 setErrMsg('No server response')
             } else {

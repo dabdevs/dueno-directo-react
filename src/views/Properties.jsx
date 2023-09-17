@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import axios from "../rest-api/axios";
 
 export default function Properties() {
+    const {auth} = useStateContext()
     const [properties, setProperties] = useState()
 
     useEffect(() => {
@@ -17,7 +18,7 @@ export default function Properties() {
         const getProperties = async () => {
             try {
                 const response = await axios.get('/properties', {
-                    headers: { "Authorization": `Bearer ${tokenStr}` },
+                    headers: { "Authorization": `Bearer ${auth.token}` },
                     signal: controller.signal
                 })
                 console.log(response)

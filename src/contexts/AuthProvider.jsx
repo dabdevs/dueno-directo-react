@@ -1,4 +1,5 @@
 import { createContext, useState } from "react";
+import { Navigate } from "react-router-dom";
 
 const AuthContext = createContext({})
 
@@ -15,10 +16,18 @@ export const AuthProvider = ({ children }) => {
         _setAuth(auth)
     }
 
+    const logout = () => {
+        console.log('logging outt...')
+        localStorage.removeItem('auth');
+        setAuth(null)
+        return < Navigate to={'/guest/login'} />
+    }
+
     return (
         <AuthContext.Provider value={{ 
             auth,
-            setAuth
+            setAuth,
+            logout
          }}
         >
             {children}
