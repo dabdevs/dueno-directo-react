@@ -5,23 +5,12 @@ import { NavLink, Navigate, Outlet } from 'react-router-dom'
 import AuthContext from '../contexts/AuthProvider'
 import LogoutButton from './LogoutButton'
 
-const navigation = [
-    { name: 'Dashboard', href: '/dashboard' },
-    { name: 'Properties', href: '/properties' },
-    { name: 'Tenants', href: '/tenants' },
-    { name: 'Users', href: '/users' },
-    { name: 'Verification Requests', href: '/verification-requests' },
-]
-const userNavigation = [
-    // { name: 'Logout', href: '#' },
-]
-
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
 }
 
 export default function DashboardLayout() {
-    const { auth, logout } = useContext(AuthContext)
+    var { auth, logout } = useContext(AuthContext)
 
     if (!auth) {
         return <Navigate to={'/guest/login'} />
@@ -44,11 +33,11 @@ export default function DashboardLayout() {
                                             />
                                         </div>
                                         <div className="hidden md:block">
-                                            <div className="ml-10 flex items-baseline space-x-4">
-                                                {navigation.map((item) => (
+                                            <div className="ml-10 px-2 flex items-baseline space-x-4">
+                                                {auth?.user?.navigation?.map((item) => (
                                                     <NavLink
                                                         key={item.name}
-                                                        to={item.href}
+                                                        to={item.endpoint}
                                                         className={({ isActive }) => classNames(
                                                             isActive
                                                                 ? 'bg-gray-900 text-white'
@@ -93,7 +82,7 @@ export default function DashboardLayout() {
                                                     leaveFrom="transform opacity-100 scale-100"
                                                     leaveTo="transform opacity-0 scale-95"
                                                 >
-                                                    <Menu.Items className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                                                    <Menu.Items className="absolute px-2 right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                                                         {/* <a
                                                             href=""
                                                             onClick={(ev) => logout(ev)}
@@ -101,6 +90,20 @@ export default function DashboardLayout() {
                                                         >
                                                             Logout
                                                         </a> */}
+
+                                                        {auth?.user?.navigation?.map((item) => (
+                                                            <NavLink
+                                                                key={item.name}
+                                                                as="a"
+                                                                to={item.endpoint}
+                                                                className={({ isActive }) => classNames(
+                                                                    isActive ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white',
+                                                                    'block rounded-md px-3 py-2 text-base font-medium'
+                                                                )}
+                                                            >
+                                                                {item.name}
+                                                            </NavLink>
+                                                        ))}
 
                                                         <LogoutButton /> 
                                                     </Menu.Items>
@@ -125,11 +128,11 @@ export default function DashboardLayout() {
 
                             <Disclosure.Panel className="md:hidden">
                                 <div className="space-y-1 px-2 pb-3 pt-2 sm:px-3">
-                                    {navigation.map((item) => (
+                                    {auth?.user?.navigation?.map((item) => (
                                         <NavLink
                                             key={item.name}
                                             as="a"
-                                            to={item.href}
+                                            to={item.endpoint}
                                             className={({ isActive }) => classNames(
                                                 isActive ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white',
                                                 'block rounded-md px-3 py-2 text-base font-medium'
@@ -159,19 +162,21 @@ export default function DashboardLayout() {
                                         </button>
                                     </div>
                                     <div className="mt-3 space-y-1 px-2">
-                                        {userNavigation.map((item) => (
+                                        {auth?.user?.navigation?.map((item) => (
                                             <NavLink
                                                 key={item.name}
-                                                onClick={(ev) => logout(ev)}
                                                 as="a"
-                                                to={item.href}
-                                                className="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white"
+                                                to={item.endpoint}
+                                                className={({ isActive }) => classNames(
+                                                    isActive ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white',
+                                                    'block rounded-md px-3 py-2 text-base font-medium'
+                                                )}
                                             >
                                                 {item.name}
                                             </NavLink>
                                         ))}
                                         <a href="#" onClick={logout} className='block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white'>
-                                            Logout 
+                                            Logout
                                         </a>
                                     </div>
                                 </div>
