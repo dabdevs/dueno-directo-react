@@ -219,6 +219,13 @@ export default function Register() {
                         </button>
                     </div>
                 </form>
+
+                <p className="mt-10 text-center text-sm text-gray-500">
+                    Already registered? 
+                    <a href="/guest/login" className="ml-2 font-semibold leading-6 text-indigo-600 hover:text-indigo-500">
+                        Login here
+                    </a>
+                </p>
             </div>
         </section>
     )

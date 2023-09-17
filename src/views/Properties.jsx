@@ -8,11 +8,6 @@ import { useEffect, useState } from "react";
 import axios from "../rest-api/axios";
 
 export default function Properties() {
-    const {auth} = useStateContext()
-    
-    alert(JSON.parse(auth).token)
-
-    return
     const [properties, setProperties] = useState()
 
     useEffect(() => {

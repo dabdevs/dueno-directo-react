@@ -1,10 +1,9 @@
 import { Navigate, Outlet } from "react-router-dom";
-import { useStateContext } from "../contexts/ContextProvider";
+import { useContext } from "react";
+import AuthContext from "../contexts/AuthProvider";
 
 export default function GuestLayout() {
-    const { auth } = useStateContext();
-
-    console.log('Guest', auth)
+    const { setAuth, auth } = useContext(AuthContext)
 
     if (auth) {
         return <Navigate to={'/dashboard'} /> 

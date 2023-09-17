@@ -1,8 +1,8 @@
-import { Fragment } from 'react'
+import { Fragment, useContext } from 'react'
 import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { Bars3Icon, BellIcon, UserIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { NavLink, Navigate, Outlet } from 'react-router-dom'
-import { useStateContext } from '../contexts/ContextProvider'
+import AuthContext from '../contexts/AuthProvider'
 
 const navigation = [
     { name: 'Dashboard', href: '/dashboard' },
@@ -25,8 +25,8 @@ function classNames(...classes) {
 }
 
 export default function DashboardLayout() {
-    var { auth } = useStateContext();
-    
+    const { setAuth, auth } = useContext(AuthContext)
+
     if (!auth) {
         return <Navigate to={'/guest/login'} />
     }
@@ -83,9 +83,9 @@ export default function DashboardLayout() {
                                                     <Menu.Button className="relative flex max-w-xs items-center rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
                                                         <span className="absolute -inset-1.5" />
                                                         <span className="sr-only">Open user menu</span>
-                                                        <span className='text-white'>{auth?.user.givenName} {auth?.user.familyName}</span>
+                                                        <span className='text-white'>{auth?.user?.givenName} {auth?.user?.familyName}</span>
                                                         <UserIcon className="h-6 w-6 text-white" aria-hidden="true" />
-                                                        {/* <img className="h-8 w-8 rounded-full" src={auth?.user.imageUrl} alt="" /> */}
+                                                        {/* <img className="h-8 w-8 rounded-full" src={auth?.user?.imageUrl} alt="" /> */}
                                                     </Menu.Button>
                                                 </div>
                                                 <Transition
@@ -145,11 +145,11 @@ export default function DashboardLayout() {
                                     <div className="flex items-center px-5">
                                         <div className="flex-shrink-0">
                                             <UserIcon className="h-6 w-6 text-white" aria-hidden="true" />
-                                            {/* <img className="h-8 w-8 rounded-full" src={auth?.user.imageUrl} alt="" /> */}
+                                            {/* <img className="h-8 w-8 rounded-full" src={auth?.user?.imageUrl} alt="" /> */}
                                         </div>
                                         <div className="ml-3">
-                                            <div className="text-base font-medium leading-none text-white">{auth?.user.givenName} {auth?.user.familyName}</div>
-                                            <div className="text-sm font-medium leading-none text-gray-400">{auth?.user.email}</div>
+                                            <div className="text-base font-medium leading-none text-white">{auth?.user?.givenName} {auth?.user?.familyName}</div>
+                                            <div className="text-sm font-medium leading-none text-gray-400">{auth?.user?.email}</div>
                                         </div>
                                         <button
                                             type="button"
