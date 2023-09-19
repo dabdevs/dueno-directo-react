@@ -1,6 +1,6 @@
 import { useState, useRef, useContext, useEffect } from "react";
 import { useStateContext } from "../contexts/ContextProvider";
-import axios from '../rest-api/axios';
+import axios from 'axios';
 import { Navigate } from "react-router-dom";
 import AuthContext, { AuthProvider } from "../contexts/AuthProvider";
 import { ArrowUpRightIcon } from "@heroicons/react/24/solid";
@@ -8,7 +8,7 @@ import { ArrowUpRightIcon } from "@heroicons/react/24/solid";
 const LOGIN_URL = '/auth/login'
 
 export default function Login() {
-    const { setAuth } = useContext(AuthContext)
+    const { setAuth, setNavigation } = useContext(AuthContext)
     const emailRef = useRef()
     const errRef = useRef()
 
@@ -47,10 +47,10 @@ export default function Login() {
                 'token': data?.token
             }
 
-            
             localStorage.setItem('auth', JSON.stringify(auth))
 
             setAuth(auth)
+            setNavigation(auth.user.navigation)
             setEmail('')
             setPassword('')
         } catch (err) {

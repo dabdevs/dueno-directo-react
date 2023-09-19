@@ -59,8 +59,6 @@ export default function Register() {
                     headers: { 'Content-Type' : 'application/json'},
                     withCredentials: true
                 });
-
-            console.log(response.data)
             
             setSuccess(true)
             setErrors(null)
