@@ -1,5 +1,6 @@
 import { createContext, useState, useEffect } from "react";
 import { Navigate } from "react-router-dom";
+import refreshToken from "../rest-api/refresh-token";
 
 const AuthContext = createContext({})
 
@@ -9,7 +10,7 @@ export const AuthProvider = ({ children }) => {
         'name': 'Dashboard',
         'endpoint': '/dashboard'
     }])
-
+    
     // const decoded = auth?.token ? jwt_decode(auth.token) : undefined;
 
     // console.log('decode', decoded)
@@ -18,23 +19,27 @@ export const AuthProvider = ({ children }) => {
         if (auth) {
             const authData = JSON.parse(auth);
 
-            console.warn('Setting Auth state')
+            console.log('Setting Auth state')
             setAuth(authData);
 
-            console.warn('Setting Navigation', authData.user.navigation)
+            console.log('Setting Navigation')
             setNavigation(authData.user.navigation)
+
+            // const timer = setInterval(async () => {
+            //     const token = JSON.parse(auth).token
+            //     console.log('timer', token)
+            //     const newToken = await refreshToken(token);
+            //     console.log('new token', newToken)
+            //     //auth.token = newToken
+            //     // auth.exp = exp
+            //     //setAuth(auth)
+            // }, 1000);
+
+            // return () => {
+            //     clearInterval(timer);
+            // };
         }
     }, []);
-
-    // const setAuth = (auth) => {
-    //     if (auth) {
-    //         localStorage.setItem('auth', JSON.stringify(auth))
-    //     } else {
-    //         localStorage.removeItem('auth')
-    //     }
-
-    //     _setAuth(auth)
-    // }
 
     const logout = () => {
         console.log('log out...')

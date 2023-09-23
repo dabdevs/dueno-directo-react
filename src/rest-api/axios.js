@@ -14,10 +14,17 @@ axios.interceptors.response.use(
     (response) => response, // Return the response for successful requests
     async (error) => {
         // Check if the error is due to token expiration
-        if (error.response && error.response.status === 401) {
+        if (error.response.status === 401) {
             try {
                 // Refresh the token
-                await refreshToken();
+                console.log('interceptor')
+                const res = await axios.post("/auth/refresh-token", {}, { Authorization: `Bearer ${auth.token}`, withCredentials: true });
+
+                console.log('refresed data', data)
+
+                if (res.status === 200) {
+                    axios.defaults.headers.common['Authorization'] = `Bearer ${data.token}`
+                }
 
                 // Retry the original request with the new token
                 return axios(error.config);

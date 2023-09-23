@@ -1,28 +1,21 @@
+import { useContext, useState } from "react";
 import axios from "./axios";
+import AuthContext from "../contexts/AuthProvider";
+
 
 const refreshToken = async () => {
-    const auth = JSON.parse(localStorage.getItem("auth"));
+    console.log('refresh token function')
+    const {auth} = useContext(AuthContext)
+    const token = auth.token
+    console.log('Refreshing token', token)
 
     try {
-        const response = await axios.post("/auth/refresh-token", {
-            headers: { "Authorization": `Bearer ${auth.token}` },
-        });
+        const response = await axios.post("/auth/refresh-token", {}, {withCredentials: true});
 
-        console.log('refresh-token', response)
-
-        const { token } = response.data;
-
-        if (!token) {
-            localStorage.removeItem("auth");
-        }
-
-        auth.token = token
-
-        localStorage.setItem("auth", JSON.stringify(auth));
-
-        return auth;
+        return response
     } catch (error) {
-        localStorage.removeItem("auth");
+        throw error;
+        //localStorage.removeItem("auth");
     }
 }
 

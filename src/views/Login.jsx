@@ -37,6 +37,14 @@ export default function Login() {
                 }
             );
 
+            if (!data) {
+                alert('login failed')
+                return
+            }
+
+            axios.defaults.headers.common['Authorization'] = `Bearer ${data.token}`
+            //Cookies.set('token', data.token, { expires: 1 }); 
+            console.log('cookie set')
             const auth = {
                 'user': {
                     ...data?.user,
@@ -50,6 +58,7 @@ export default function Login() {
             localStorage.setItem('auth', JSON.stringify(auth))
 
             setAuth(auth)
+
             setNavigation(auth.user.navigation)
             setEmail('')
             setPassword('')
