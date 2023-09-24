@@ -1,6 +1,6 @@
 import { useContext } from 'react'
 import { NavLink } from 'react-router-dom'
-import { Bars3Icon, BellIcon, UserIcon, XMarkIcon } from '@heroicons/react/24/outline'
+import { Bars3Icon, BellIcon, UserCircleIcon, UserIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { Disclosure, Menu, Transition } from '@headlessui/react'
 import LogoutButton from './LogoutButton'
 import AuthContext from '../contexts/AuthProvider'
@@ -11,7 +11,7 @@ function classNames(...classes) {
 
 export const NavBar = () => {
     const { auth, logout, navigation } = useContext(AuthContext)
-    
+
     return (
         <nav>
             <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -70,10 +70,9 @@ export const NavBar = () => {
                                 <div>
                                     <Menu.Button className="relative flex max-w-xs items-center rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
                                         <span className="absolute -inset-1.5" />
-                                        <span className="sr-only">Open user menu</span>
+                                        <span className="sr-only">Open auth menu</span>
                                         <span className='text-white'>{auth?.user?.givenName} {auth?.user?.familyName}</span>
-                                        <UserIcon className="h-6 w-6 text-white" aria-hidden="true" />
-                                        {/* <img className="h-8 w-8 rounded-full" src={auth?.user?.imageUrl} alt="" /> */}
+                                        <UserCircleIcon className='text-white h-10 ml-2'/>
                                     </Menu.Button>
                                 </div>
                                 <Transition
@@ -138,7 +137,7 @@ export const NavBar = () => {
                     </div>
                 </div>
             </div>
-            
+
             <Disclosure.Panel className="md:hidden">
                 <div className="space-y-1 px-2 pb-3 pt-2 sm:px-3">
                     <NavLink
@@ -169,7 +168,7 @@ export const NavBar = () => {
                 <div className="border-t border-gray-700 pb-3 pt-4">
                     <div className="flex items-center px-5">
                         <div className="flex-shrink-0">
-                            <UserIcon className="h-6 w-6 text-white" aria-hidden="true" />
+                            <authIcon className="h-6 w-6 text-white" aria-hidden="true" />
                             {/* <img className="h-8 w-8 rounded-full" src={auth?.user?.imageUrl} alt="" /> */}
                         </div>
                         <div className="ml-3">

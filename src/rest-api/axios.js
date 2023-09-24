@@ -1,10 +1,10 @@
 import axios from "axios";
-import refreshToken from "./refresh-token";
+import { useContext } from "react";
+import AuthContext from "../contexts/AuthProvider";
 
 axios.defaults.baseURL = "http://localhost:4000/api/v1";
 
 axios.create({
-    // baseURL: 'http://localhost:4000/api/v1',
     headers: {
     "Content-Type": "application/json",
   },
@@ -18,9 +18,8 @@ axios.interceptors.response.use(
             try {
                 // Refresh the token
                 console.log('interceptor')
-                const res = await axios.post("/auth/refresh-token", {}, { Authorization: `Bearer ${auth.token}`, withCredentials: true });
-
-                console.log('refresed data', data)
+                const {data } = await axios.post("/auth/refresh-token");
+                console.log('new token', data.token)
 
                 if (res.status === 200) {
                     axios.defaults.headers.common['Authorization'] = `Bearer ${data.token}`

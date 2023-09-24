@@ -1,60 +1,68 @@
 import { createContext, useState, useEffect } from "react";
 import { Navigate } from "react-router-dom";
-import refreshToken from "../rest-api/refresh-token";
+import axios from "../rest-api/axios";
+import { getCookie, setCookie } from "../utils";
 
 const AuthContext = createContext({})
 
 export const AuthProvider = ({ children }) => {
-    const [auth, setAuth] = useState(localStorage.getItem("auth") || null)
-    const [navigation, setNavigation] = useState([{
-        'name': 'Dashboard',
-        'endpoint': '/dashboard'
-    }])
-    
-    // const decoded = auth?.token ? jwt_decode(auth.token) : undefined;
-
-    // console.log('decode', decoded)
+    const [auth, setAuth] = useState(JSON.parse(getCookie('auth')) || {});
+    const [user, setUser] = useState({});
+    const [navigation, setNavigation] = useState([]);
+    const [roles, setRoles] = useState([]);
+    const [permissions, setPermissions] = useState([]);
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         if (auth) {
-            const authData = JSON.parse(auth);
-
-            console.log('Setting Auth state')
-            setAuth(authData);
-
-            console.log('Setting Navigation')
-            setNavigation(authData.user.navigation)
-
-            // const timer = setInterval(async () => {
-            //     const token = JSON.parse(auth).token
-            //     console.log('timer', token)
-            //     const newToken = await refreshToken(token);
-            //     console.log('new token', newToken)
-            //     //auth.token = newToken
-            //     // auth.exp = exp
-            //     //setAuth(auth)
-            // }, 1000);
-
-            // return () => {
-            //     clearInterval(timer);
-            // };
+            axios.defaults.headers.common['Authorization'] = `Bearer ${auth.token}`;
+            setUser(auth.user)
+            setNavigation(auth.navigation)
+            setRoles(auth.roles)
+            setPermissions(auth.permissions)
+        } else {
+            // Remove the auth from Axios headers
+            setUser({})
+            setNavigation([])
+            setRoles([])
+            setPermissions([])
+            delete axios.defaults.headers.common['Authorization'];
         }
-    }, []);
+    }, [auth]);
+
+    const login = async (email, password) => {
+        try {
+            setLoading(true);
+            const { data } = await axios.post('/auth/login', { email, password });
+
+            setCookie('auth', JSON.stringify(data), 1);
+        } catch (error) {
+            console.error('Login error:', error);
+        } finally {
+            setLoading(false);
+        }
+    };
 
     const logout = () => {
-        console.log('log out...')
+        setAuth({});
         localStorage.removeItem('auth');
-        setAuth(null)
-        return < Navigate to={'/guest/login'} />
-    }
+        localStorage.removeItem('auth');
+    };
 
     return (
         <AuthContext.Provider value={{
+            login,
+            logout,
             auth,
             setAuth,
-            logout,
+            user,
+            setUser,
             navigation,
-            setNavigation
+            setNavigation,
+            roles,
+            setRoles,
+            permissions,
+            setPermissions
         }}
         >
             {children}

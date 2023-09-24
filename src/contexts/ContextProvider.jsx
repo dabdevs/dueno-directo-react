@@ -8,17 +8,17 @@ const StateContext = createContext({
 })
 
 export const ContextProvider = ({ children }) => {
-    const [auth, _setAuth] = useState(localStorage.getItem('auth') || null)
+    const [auth, _setAuth] = useState(localStorage.getItem('token') || null)
     const [token, setToken] = useState('')
 
     const setAuth = (auth) => {
         if (auth) {
-            localStorage.setItem('auth', auth)
+            localStorage.setItem('token', auth)
         } else {
-            localStorage.removeItem('auth')
+            localStorage.removeItem('token')
         }
 
-        _setAuth(JSON.parse(auth))
+        _setToken(JSON.parse(auth))
     }
     return (
         <StateContext.Provider value={{
