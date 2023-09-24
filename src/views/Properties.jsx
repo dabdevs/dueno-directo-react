@@ -8,7 +8,7 @@ import PropertyListItem from "../components/PropertyListItem";
 import AuthContext from "../contexts/AuthProvider";
 
 export default function Properties() {
-    const { token } = useContext(AuthContext)
+    const { auth } = useContext(AuthContext)
     const [properties, setProperties] = useState()
 
     useEffect(() => {
@@ -18,7 +18,7 @@ export default function Properties() {
         const getProperties = async () => {
             try {
                 const { data } = await axios.get('properties', {
-                    headers: { "Authorization": `Bearer ${token}` },
+                    headers: { "Authorization": `Bearer ${auth.token}` },
                     signal: controller.signal,
                     withCredentials: true
                 })

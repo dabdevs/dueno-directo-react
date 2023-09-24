@@ -1,6 +1,4 @@
 import axios from "axios";
-import { useContext } from "react";
-import AuthContext from "../contexts/AuthProvider";
 
 axios.defaults.baseURL = "http://localhost:4000/api/v1";
 
@@ -13,9 +11,11 @@ axios.create({
 axios.interceptors.response.use(
     (response) => response, // Return the response for successful requests
     async (error) => {
+        const originalRequest = error.config;
         // Check if the error is due to token expiration
-        if (error.response.status === 401) {
+        if (error.response && error.response.status === 401 && !originalRequest._retry) {
             try {
+                originalRequest._retry = true;
                 // Refresh the token
                 console.log('interceptor')
                 const {data } = await axios.post("/auth/refresh-token");
@@ -23,18 +23,18 @@ axios.interceptors.response.use(
 
                 if (res.status === 200) {
                     axios.defaults.headers.common['Authorization'] = `Bearer ${data.token}`
+                    originalRequest.headers.Authorization = `Bearer ${data.token}`;
                 }
 
                 // Retry the original request with the new token
-                return axios(error.config);
+                return axios(originalRequest);
             } catch (refreshError) {
                 // Handle token refresh error
                 throw refreshError;
             }
         }
 
-        // For other errors, just re-throw the error
-        throw error;
+        return Promise.reject(error);
     }
 );
 

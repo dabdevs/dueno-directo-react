@@ -5,9 +5,9 @@ import AuthContext from '../contexts/AuthProvider'
 import { NavBar } from './NavBar'
 
 export default function DashboardLayout() {
-    var { user } = useContext(AuthContext)
-
-    if (!user) {
+    var { auth } = useContext(AuthContext)
+    
+    if (!auth) {
         return <Navigate to={'/guest/login'} />
     }
 
@@ -17,7 +17,7 @@ export default function DashboardLayout() {
                 <Disclosure as="nav" className="bg-gray-800">
                     {({ open }) => (
                         <>
-                            <NavBar />
+                            <NavBar/>
 
                             <Outlet />
                         </>
