@@ -1,5 +1,6 @@
 import { useRef, useState, useEffect } from "react"
 import axios from '../rest-api/axios'
+import { Navigate } from "react-router-dom";
 
 const passwordRegex = /^(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,20}$/;
 const REGISTER_URL = '/auth/register'
@@ -20,11 +21,11 @@ export default function Register() {
 
     const [role, setRole] = useState('')
 
-    const [success, setSuccess] = useState(false)
+    const [success, setSuccess] = useState('')
     const [errors, setErrors] = useState(null)
 
     useEffect(() => {
-        emailRef.current.focus()
+        emailRef?.current?.focus()
     }, [])
 
     useEffect(() => {
@@ -52,27 +53,27 @@ export default function Register() {
             return
         }
 
-        try {
-            const response = await axios.post(REGISTER_URL,
-                JSON.stringify({ email, password, role }),
-                {
-                    headers: { 'Content-Type' : 'application/json'},
-                    withCredentials: true
-                });
-            
-            setSuccess(true)
-            setErrors(null)
-        } catch (err) {
-            setSuccess(false)
+        await axios.post(REGISTER_URL,
+            JSON.stringify({ email, password, role }),
+            {
+                headers: { 'Content-Type': 'application/json' },
+                withCredentials: true
+            })
+            .then(({ data }) => {
+                setSuccess(data.message)
+                setErrors(null)
+            })
+            .catch(({ response }) => {
+                setSuccess('')
+                console.log(response)
+                if (!response) {
+                    setErrors({ message: 'No server response' })
+                } else {
+                    setErrors(response.data.errors)
+                }
 
-            if (!err?.response) {
-                setErrors(setErrors({ message: 'No server response' }))
-            } else {
-                setErrors(err.response.data.errors)
-            }
-
-            errRef.current.focus()
-        }
+                errRef?.current?.focus()
+            })
 
     }
 
@@ -83,31 +84,29 @@ export default function Register() {
             </h2>
             <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
                 <form className="space-y-6" onSubmit={handleSubmit}>
-
-                    {errors != null && 
-                    (<div ref={errRef} className='flex bg-red-100 rounded-lg p-4 mb-4 text-sm text-red-700' aria-live='assertive'>
-                        <svg className="w-5 h-5 inline mr-3" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path></svg>
-                        <div>
-                            <span className="font-medium">Error!</span> 
-                            <ul>
-                                {errors?.email && errors?.email.map(e => <li>{e}</li>)}
-                                {errors?.password && errors?.password.map(e => <li>{e}</li>)}
-                                {errors?.role && errors?.role.map(e => <li>{e}</li>)}
-                                {errors?.message && <li>{errors?.message}</li>}
-                            </ul>
+                    {errors != null &&
+                        (<div ref={errRef} className='flex bg-red-100 rounded-lg p-4 mb-4 text-sm text-red-700' aria-live='assertive'>
+                            <svg className="w-5 h-5 inline mr-3" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path></svg>
+                            <div>
+                                <span className="font-medium">Errors!</span>
+                                <ul>
+                                    {errors?.email && errors?.email.map(e => <li>{e}</li>)}
+                                    {errors?.password && errors?.password.map(e => <li>{e}</li>)}
+                                    {errors?.role && errors?.role.map(e => <li>{e}</li>)}
+                                    {errors?.message && <li>{errors?.message}</li>}
+                                </ul>
+                            </div>
                         </div>
-                    </div>
-                    )}
+                        )}
 
                     {success &&
                         (<div ref={errRef} className='flex bg-green-100 rounded-lg p-4 mb-4 text-sm text-green-700' aria-live='assertive'>
                             <svg className="w-5 h-5 inline mr-3" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path></svg>
                             <div>
-                                <span className="font-medium">Success! User created successfuly</span>
+                                <span className="font-medium">{success}</span>
                             </div>
                         </div>
-                    )}
-                    
+                        )}
                     <div>
                         <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">
                             Email address
@@ -204,7 +203,7 @@ export default function Register() {
                             >
                                 <option value=''>Select an option</option>
                                 <option value={'tenant'}>A renter</option>
-                                <option value={'owner'}>An landlord</option>
+                                <option value={'owner'}>A landlord</option>
                             </select>
                         </div>
                     </div>
@@ -219,7 +218,7 @@ export default function Register() {
                 </form>
 
                 <p className="mt-10 text-center text-sm text-gray-500">
-                    Already registered? 
+                    Already registered?
                     <a href="/guest/login" className="ml-2 font-semibold leading-6 text-indigo-600 hover:text-indigo-500">
                         Login here
                     </a>

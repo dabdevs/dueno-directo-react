@@ -22,9 +22,12 @@ axios.interceptors.response.use(
                 console.log('new token', data.token)
 
                 if (res.status === 200) {
+                    alert('hey')
                     axios.defaults.headers.common['Authorization'] = `Bearer ${data.token}`
                     originalRequest.headers.Authorization = `Bearer ${data.token}`;
                 }
+
+                console.log('Original request: ',originalRequest)
 
                 // Retry the original request with the new token
                 return axios(originalRequest);
