@@ -15,27 +15,21 @@ export default function Properties() {
         let isMounted = true
         const controller = new AbortController()
 
-        const getProperties = async () => {
-            try {
-                const { data } = await axios.get('properties', {
-                    headers: { "Authorization": `Bearer ${auth.token}` },
-                    signal: controller.signal,
-                    withCredentials: true
-                })
-
+        const getProperties = () => {
+            axios.get('properties', {
+                headers: { "Authorization": `Bearer ${auth.token}` },
+                signal: controller.signal,
+                withCredentials: true
+            }).then(({ data }) => {
+                console.log(data)
                 isMounted && setProperties(data)
-
-                // const instance = new Datatable(document.getElementById('datatable'), data)
-
-                // document.getElementById('datatable-search-input').addEventListener('input', (e) => {
-                //     instance.search(e.target.value);
-                // });
-            } catch (err) {
+            }).catch((err) => {
+                console.log(err)
                 isMounted = false
                 if (err?.response?.data?.message) {
                     alert(err?.response?.data?.message)
                 }
-            }
+            })
         }
 
         getProperties()

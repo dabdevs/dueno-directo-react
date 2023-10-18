@@ -40,7 +40,7 @@ export default function Register() {
         setErrors(null)
     }, [email, password, matchPassword])
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = (e) => {
         e.preventDefault()
 
         if (email == '' || password == '' || role == '') {
@@ -53,7 +53,7 @@ export default function Register() {
             return
         }
 
-        await axios.post(REGISTER_URL,
+        axios.post(REGISTER_URL,
             JSON.stringify({ email, password, role }),
             {
                 headers: { 'Content-Type': 'application/json' },
@@ -62,10 +62,13 @@ export default function Register() {
             .then(({ data }) => {
                 setSuccess(data.message)
                 setErrors(null)
+                setEmail('')
+                setPassword('')
+                setMatchPassword('')
+                setRole('')
             })
             .catch(({ response }) => {
                 setSuccess('')
-                console.log(response)
                 if (!response) {
                     setErrors({ message: 'No server response' })
                 } else {
@@ -117,6 +120,7 @@ export default function Register() {
                                 name="email"
                                 type="email"
                                 autoComplete="email"
+                                value={email}
                                 ref={emailRef}
                                 onChange={(e) => setEmail(e.target.value)}
                                 onFocus={() => setEmailFocus(true)}
@@ -137,6 +141,7 @@ export default function Register() {
                             <input
                                 id="password"
                                 name="password"
+                                value={password}
                                 type="password"
                                 autoComplete="false"
                                 onChange={(e) => setPassword(e.target.value)}
@@ -167,6 +172,7 @@ export default function Register() {
                             <input
                                 id="match-password"
                                 name="match-password"
+                                value={matchPassword}
                                 type="password"
                                 autoComplete="false"
                                 onChange={(e) => setMatchPassword(e.target.value)}
@@ -197,12 +203,13 @@ export default function Register() {
                             <select
                                 id="role"
                                 name="role"
+                                value={role}
                                 onChange={(e) => setRole(e.target.value)}
                                 required
                                 className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                             >
                                 <option value=''>Select an option</option>
-                                <option value={'tenant'}>A renter</option>
+                                <option value={'renter'}>A renter</option>
                                 <option value={'owner'}>A landlord</option>
                             </select>
                         </div>
